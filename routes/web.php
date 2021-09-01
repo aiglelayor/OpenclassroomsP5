@@ -14,3 +14,12 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+/* Products Routes */
+Route::get('/boutique', 'ProductController@index')->name('products.index');
+Route::get('/boutique/{slug}', 'ProductController@show')->name('products.show');
+
+/* ShoppingCart Routes */
+Route::post('/panier/ajouter', 'CartController@store')->name('cart.store');
+
+App::register('Gloudemans\Shoppingcart\ShoppingcartServiceProvider');
