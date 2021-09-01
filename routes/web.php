@@ -22,4 +22,8 @@ Route::get('/boutique/{slug}', 'ProductController@show')->name('products.show');
 /* ShoppingCart Routes */
 Route::post('/panier/ajouter', 'CartController@store')->name('cart.store');
 
+Route::get('/videpanier', function(){
+    \Gloudemans\Shoppingcart\Facades\Cart::destroy();
+});
+
 App::register('Gloudemans\Shoppingcart\ShoppingcartServiceProvider');
