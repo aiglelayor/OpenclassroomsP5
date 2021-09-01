@@ -11,6 +11,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 
     <!-- Favicons -->
     <link rel="apple-touch-icon" href="/docs/5.1/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
@@ -159,6 +160,112 @@
         .blog-footer p:last-child {
             margin-bottom: 0;
         }
+
+        /*
+        * Panier
+        */
+
+        .payment-info {
+            background: blue;
+            padding: 10px;
+            border-radius: 6px;
+            color: #fff;
+            font-weight: bold
+        }
+
+        .product-details {
+            padding: 10px
+        }
+
+        .cart {
+            background: #fff
+        }
+
+        .p-about {
+            font-size: 12px
+        }
+
+        .table-shadow {
+            -webkit-box-shadow: 5px 5px 15px -2px rgba(0, 0, 0, 0.42);
+            box-shadow: 5px 5px 15px -2px rgba(0, 0, 0, 0.42)
+        }
+
+        .type {
+            font-weight: 400;
+            font-size: 10px
+        }
+
+        label.radio {
+            cursor: pointer
+        }
+
+        label.radio input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            visibility: hidden;
+            pointer-events: none
+        }
+
+        label.radio span {
+            padding: 1px 12px;
+            border: 2px solid #ada9a9;
+            display: inline-block;
+            color: #8f37aa;
+            border-radius: 3px;
+            text-transform: uppercase;
+            font-size: 11px;
+            font-weight: 300
+        }
+
+        label.radio input:checked+span {
+            border-color: #fff;
+            background-color: blue;
+            color: #fff
+        }
+
+        .credit-inputs {
+            background: rgb(102, 102, 221);
+            color: #fff !important;
+            border-color: rgb(102, 102, 221)
+        }
+
+        .credit-inputs::placeholder {
+            color: #fff;
+            font-size: 13px
+        }
+
+        .credit-card-label {
+            font-size: 9px;
+            font-weight: 300
+        }
+
+        .form-control.credit-inputs:focus {
+            background: rgb(102, 102, 221);
+            border: rgb(102, 102, 221)
+        }
+
+        .line {
+            border-bottom: 1px solid rgb(102, 102, 221)
+        }
+
+        .information span {
+            font-size: 12px;
+            font-weight: 500
+        }
+
+        .information {
+            margin-bottom: 5px
+        }
+
+        .items {
+            -webkit-box-shadow: 5px 5px 4px -1px rgba(0, 0, 0, 0.25);
+            box-shadow: 5px 5px 4px -1px rgba(0, 0, 0, 0.08)
+        }
+
+        .spec {
+            font-size: 11px
+        }
     </style>
 
 
@@ -174,8 +281,8 @@
         <header class="blog-header py-3">
             <div class="row flex-nowrap justify-content-between align-items-center">
                 <div class="col-4 pt-1">
-                    <a class="link-secondary position-relative" href="#">Panier
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ 
+                    <a class="link-secondary position-relative" href="{{ route('cart.index') }}">Panier
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{
 \Gloudemans\Shoppingcart\Facades\Cart::count() }}</span>
                     </a>
                 </div>
@@ -206,9 +313,9 @@
     </div>
 
     @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
     @endif
     <main class="container">
         <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
