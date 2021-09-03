@@ -29,3 +29,7 @@ Route::get('/videpanier', function(){
 });
 
 App::register('Gloudemans\Shoppingcart\ShoppingcartServiceProvider');
+
+
+/* Checkout Routes */
+Route::get('/paiement', 'CheckoutController@index')->name('checkout.index');

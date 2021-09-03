@@ -9,6 +9,8 @@
     <meta name="generator" content="Hugo 0.87.0">
     <title>ChocoCoco</title>
 
+    @yield('extra-script')
+
     <!-- Bootstrap core CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
@@ -266,13 +268,15 @@
         .spec {
             font-size: 11px
         }
+
+        /* CSS from Stripe for checkout part */
     </style>
 
 
     <!-- Custom styles for this template -->
     <link href="https://fonts.googleapis.com/css?family=Playfair&#43;Display:700,900&amp;display=swap" rel="stylesheet">
     <!-- Custom styles for this template -->
-    <link href="blog.css" rel="stylesheet">
+    <!-- <link href="blog.css" rel="stylesheet"> -->
 </head>
 
 <body>
@@ -337,9 +341,6 @@
             <a href="#">Back to top</a>
         </p>
     </footer>
-
-
-
+    @yield('extra-js')
 </body>
-
 </html>
