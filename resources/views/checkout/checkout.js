@@ -1,6 +1,11 @@
+// À mettre dans index.blade.php pour mieux organiser code
+// <!-- <script src="../checkout/checkout.js"></script> -->
+
+
 // A reference to Stripe.js initialized with your real test publishable API key.
-var stripe = Stripe("pk_test_51JVImyLtSNYQRudIEPWRZgHqOvYHvAhKHnMXp5AA4Xh9EqihbyP4zJicSh4LiL9kDXIly8sIzJ8jXDC6QZg7osar00054XHAOp");
-console.log('here');
+
+
+var stripe = stripe("pk_test_51JVImyLtSNYQRudIEPWRZgHqOvYHvAhKHnMXp5AA4Xh9EqihbyP4zJicSh4LiL9kDXIly8sIzJ8jXDC6QZg7osar00054XHAOp");
 // The items the customer wants to buy
 var elements = stripe.elements();
 
@@ -24,4 +29,3 @@ var style = {
 var card = elements.create("card", { style: style });
 // Stripe injects an iframe into the DOM
 card.mount("#card-element");
-

@@ -19,16 +19,23 @@ class CheckoutController extends Controller
      */
     public function index()
     {
+        if (Cart::count() == 0) {
+            return redirect()->route('products.index');
+        }
         /* Stripe - société de paiement en ligne - a été utilisée ici */
         Stripe::setApiKey('sk_test_51JVImyLtSNYQRudIsA2NG7DKLyCl0WGMgjj98SaVOwICMCtgokOtvw5QCDMRDqCu6knpcPBH1BgTGOKAGW093XOv00ie0lGC0T');
 
-        $paymentIntent = PaymentIntent::create([
+        $intent = PaymentIntent::create([
             'amount' => round(Cart::total()),
-            'currency' => 'eur',
+            'currency' => 'eur'
+            // 'metadata' => [
+            //     Récupérer l'id d'utilisateur
+            //     'userId' => Auth::user()->id
+            // ]
         ]);
 
 
-        $clientSecret = Arr::get($paymentIntent, 'client_secret');
+        $clientSecret = Arr::get($intent, 'client_secret');
 
         return view('checkout.index',[
             'clientSecret' => $clientSecret
@@ -53,7 +60,11 @@ class CheckoutController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Cart::destroy();
+        
+        $data = $request->json()->all();
+
+        return $data['paymentIntent'];
     }
 
     /**

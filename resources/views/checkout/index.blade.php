@@ -1,5 +1,9 @@
 @extends('layouts.master')
 
+@section('extra-meta')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
+
 @section('extra-script')
 <script src="https://js.stripe.com/v3/"></script>
 @endsection
@@ -9,14 +13,15 @@
     <h1>Page de Paiement</h1>
     <div class="row">
         <div class="col-md-6">
-            <form id="payment-form" class="my-4">
+            <form action="{{ route('checkout.store') }}" method="post" id="payment-form" class="my-4">
+            {{csrf_field()}}
                 <div id="card-element">
                     <!--Stripe.js injects the Card Element-->
                 </div>
                 <p id="card-error" class="my-2" role="alert"></p>
                 <button class="btn btn-success mt-4" id="submit">
                     <div class="spinner hidden" id="spinner"></div>
-                    <span id="button-text">Procéder au paiement</span>
+                    <span id="button-text">Procéder au paiement ({{ getPrice(\Gloudemans\Shoppingcart\Facades\Cart::total())}})</span>
                 </button>
                 <p class="result-message hidden">
                     Payment succeeded, see the result in your
@@ -29,12 +34,9 @@
 @endsection
 
 @section('extra-js')
-<!-- <script src="../checkout/checkout.js"></script> -->
-
 <script>
     // A reference to Stripe.js initialized with your real test publishable API key.
-    var stripe = Stripe("pk_test_51JVImyLtSNYQRudIEPWRZgHqOvYHvAhKHnMXp5AA4Xh9EqihbyP4zJicSh4LiL9kDXIly8sIzJ8jXDC6QZg7osar00054XHAOp");
-
+    var stripe = Stripe('pk_test_51JVImyLtSNYQRudIEPWRZgHqOvYHvAhKHnMXp5AA4Xh9EqihbyP4zJicSh4LiL9kDXIly8sIzJ8jXDC6QZg7osar00054XHAOp');
     // The items the customer wants to buy
     var elements = stripe.elements();
 
@@ -81,12 +83,14 @@
     // document.querySelector("#card-error").textContent = event.error ? event.error.message : "";
     // });
 
+    var submitButton = document.getElementById('submit');
     var form = document.getElementById("payment-form");
     form.addEventListener("submit", function(event) {
-    event.preventDefault();
-    // Complete payment when the submit button is clicked
-    
-    payWithCard(stripe, card, "{{ $clientSecret }}");
+        event.preventDefault();
+        submitButton.disabled = true;
+        // Complete payment when the submit button is clicked
+        
+        payWithCard(stripe, card, "{{ $clientSecret }}");
     });
 
     // Calls stripe.confirmCardPayment
@@ -104,13 +108,38 @@
                 if (result.error) {
                     // Show error to your customer
                     //showError(result.error.message);
+                    submitButton.disabled = false;
                     console.log(result.error.message);
                 } else {
                     // The payment succeeded!
                     //orderComplete(result.paymentIntent.id);
                     if (result.paymentIntent.status === 'succeeded')
                     {
-                        console.log(result.paymentIntent)
+                        var paymentIntent = result.paymentIntent;
+                        var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                        var form = document.getElementById('payment-form');
+                        var url = form.action;
+                        var redirect = '/merci';
+                        console.log(result.paymentIntent);
+
+                        fetch(url,
+                            {
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "Accept": "application/json, text-plain, */*",
+                                    "X-Requested-With": "XMLHttpRequest",
+                                    "X-CSRF-TOKEN": token
+                                },
+                                method: 'post',
+                                body: JSON.stringify({
+                                    paymentIntent: paymentIntent
+                                })
+                            }).then((data) => {
+                            console.log(data)
+                            window.location.href = redirect;
+                        }).catch((error) => {
+                            console.log(error)
+                        })
                     }
                 }
             });
